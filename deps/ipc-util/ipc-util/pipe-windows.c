@@ -14,6 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <Aclapi.h>
 #include "pipe.h"
 
 #define IPC_PIPE_BUF_SIZE 1024
@@ -168,15 +169,25 @@ static inline bool ipc_pipe_internal_wait_for_connection(
 static inline bool ipc_pipe_internal_open_pipe(ipc_pipe_client_t *pipe,
 		const char *name)
 {
+	PSECURITY_DESCRIPTOR descriptor = NULL;
 	DWORD mode = PIPE_READMODE_MESSAGE;
 	char new_name[512];
+
+	SECURITY_ATTRIBUTES attr = {0};
 
 	strcpy_s(new_name, sizeof(new_name), "\\\\.\\pipe\\");
 	strcat_s(new_name, sizeof(new_name), name);
 
+	descriptor = create_full_access_security_descriptor();
+
+	attr.nLength = sizeof(attr);
+	attr.lpSecurityDescriptor = descriptor;
+
 	pipe->handle = CreateFileA(new_name, GENERIC_READ | GENERIC_WRITE,
-			0, NULL, OPEN_EXISTING, 0, NULL);
+			0, &attr, OPEN_EXISTING, 0, NULL);
+	free(descriptor);
 	if (pipe->handle == INVALID_HANDLE_VALUE) {
+		DWORD err = GetLastError();
 		return false;
 	}
 

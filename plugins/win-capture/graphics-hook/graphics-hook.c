@@ -238,9 +238,7 @@ static inline bool init_hook(HANDLE thread_handle)
 	sprintf(keepalive_name, "%s%lu", EVENT_HOOK_KEEPALIVE,
 			GetCurrentProcessId());
 
-	if (!init_pipe()) {
-		return false;
-	}
+	init_pipe();
 	if (!init_signals()) {
 		return false;
 	}
@@ -792,8 +790,10 @@ BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID unused1)
 
 		dll_inst = hinst;
 
-		HANDLE cur_thread = OpenThread(THREAD_ALL_ACCESS, false,
+		HANDLE cur_thread = OpenThread(THREAD_QUERY_INFORMATION, false,
 				GetCurrentThreadId());
+
+		DWORD err_val = GetLastError();
 
 		/* this prevents the library from being automatically unloaded
 		 * by the next FreeLibrary call */
