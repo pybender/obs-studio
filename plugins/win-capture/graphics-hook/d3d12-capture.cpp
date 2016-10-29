@@ -31,7 +31,6 @@ struct d3d12_data {
 			struct shtex_data      *shtex_info;
 			ID3D11Resource         *backbuffer11;
 			ID3D11Texture2D        *copy_tex;
-			HANDLE                 nt_handle;
 			HANDLE                 handle;
 		};
 	};
@@ -51,8 +50,6 @@ void d3d12_free(void)
 		data.context11->Release();
 	if (data.device11on12)
 		data.device11on12->Release();
-	if (data.nt_handle)
-		CloseHandle(data.nt_handle);
 
 	capture_free();
 
@@ -116,7 +113,6 @@ static bool create_d3d12_tex(ID3D12Resource *backbuffer)
 }
 
 typedef PFN_D3D11ON12_CREATE_DEVICE create_11_on_12_t;
-typedef PFN_D3D11_CREATE_DEVICE create_11_t;
 
 const static D3D_FEATURE_LEVEL feature_levels[] =
 {
