@@ -238,9 +238,7 @@ static inline bool init_hook(HANDLE thread_handle)
 	sprintf(keepalive_name, "%s%lu", EVENT_HOOK_KEEPALIVE,
 			GetCurrentProcessId());
 
-	if (!init_pipe()) {
-		return false;
-	}
+	init_pipe();
 	if (!init_signals()) {
 		return false;
 	}
