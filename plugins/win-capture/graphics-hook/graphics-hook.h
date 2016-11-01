@@ -91,7 +91,7 @@ extern HANDLE signal_exit;
 extern HANDLE tex_mutexes[2];
 extern char system_path[MAX_PATH];
 extern char process_name[MAX_PATH];
-extern char keepalive_name[64];
+extern wchar_t keepalive_name[64];
 extern HWND dummy_window;
 extern volatile bool active;
 
@@ -136,13 +136,7 @@ static inline HMODULE load_system_library(const char *name)
 
 static inline bool capture_alive(void)
 {
-	HANDLE event = OpenEventA(GC_EVENT_FLAGS, false, keepalive_name);
-	if (event) {
-		CloseHandle(event);
-		return true;
-	}
-
-	return false;
+	return !!FindWindowW(keepalive_name, NULL);
 }
 
 static inline bool capture_active(void)
