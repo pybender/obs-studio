@@ -316,6 +316,7 @@ static inline bool attempt_hook(void)
 
 	if (!d3d9_hooked) {
 		if (!d3d9_hookable()) {
+			DbgOut("no D3D9 hook address found!\n");
 			d3d9_hooked = true;
 		} else {
 			d3d9_hooked = hook_d3d9();
@@ -327,6 +328,7 @@ static inline bool attempt_hook(void)
 
 	if (!dxgi_hooked) {
 		if (!dxgi_hookable()) {
+			DbgOut("no DXGI hook address found!\n");
 			dxgi_hooked = true;
 		} else {
 			dxgi_hooked = hook_dxgi();
