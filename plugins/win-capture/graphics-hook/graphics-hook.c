@@ -75,7 +75,7 @@ bool init_pipe(void)
 	return true;
 }
 
-static HANDLE init_event(const char *name, DWORD pid)
+static HANDLE init_event(const wchar_t *name, DWORD pid)
 {
 	HANDLE handle = create_event_plus_id(name, pid);
 	if (!handle)
@@ -83,7 +83,7 @@ static HANDLE init_event(const char *name, DWORD pid)
 	return handle;
 }
 
-static HANDLE init_mutex(const char *name, DWORD pid)
+static HANDLE init_mutex(const wchar_t *name, DWORD pid)
 {
 	HANDLE handle = create_mutex_plus_id(name, pid);
 	if (!handle)
