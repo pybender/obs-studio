@@ -242,9 +242,7 @@ static inline bool init_hook(HANDLE thread_handle)
 	if (!init_signals()) {
 		return false;
 	}
-	if (!init_mutexes()) {
-		return false;
-	}
+	init_mutexes();
 	if (!init_system_path()) {
 		return false;
 	}
